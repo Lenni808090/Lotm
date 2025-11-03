@@ -6,6 +6,8 @@ public class Movement : MonoBehaviour
     [SerializeField] private float speed = 5f;
     [SerializeField] private float sensitivity = 100f;
 
+    [SerializeField] private float jumpForce = 40;
+    private bool jumpQueued;
     private Rigidbody rb;
     private Transform cameraHolder;
     private Transform cameraPosition;
@@ -60,12 +62,16 @@ public class Movement : MonoBehaviour
     void Update()
     {
         handleMouseLook();
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            jumpQueued = true;
+        }
     }
 
     void FixedUpdate()
     {
         handleMovementAndRotation();
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (jumpQueued)
         {
             handleJump();
         }
@@ -95,7 +101,8 @@ public class Movement : MonoBehaviour
 
     public void handleJump()
     {
-
+        rb.AddForce(Vector3.up * jumpForce);
+        jumpQueued = false;
     }
 
     public void setRb(Rigidbody newRb)
