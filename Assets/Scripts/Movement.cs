@@ -5,8 +5,10 @@ public class Movement : MonoBehaviour
 
     [SerializeField] private float speed = 5f;
     [SerializeField] private float sensitivity = 100f;
-
     [SerializeField] private float jumpForce = 40;
+    [SerializeField] private bool grounded;
+    [SerializeField] private GameObject groundCheckObj;
+    private GroundChecker groundChecker;
     private bool jumpQueued;
     private Rigidbody rb;
     private Transform cameraHolder;
@@ -51,6 +53,8 @@ public class Movement : MonoBehaviour
             return;
         }
 
+        groundChecker = groundCheckObj.GetComponent<GroundChecker>();
+
         mainCam.transform.SetParent(cameraPosition);
         mainCam.transform.localPosition = Vector3.zero;
         mainCam.transform.localRotation = Quaternion.identity;
@@ -61,10 +65,14 @@ public class Movement : MonoBehaviour
 
     void Update()
     {
+        grounded = groundChecker.isGrounded();
         handleMouseLook();
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            jumpQueued = true;
+            if (grounded)
+            {
+                jumpQueued = true;
+            }
         }
     }
 
