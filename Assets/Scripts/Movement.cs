@@ -10,6 +10,7 @@ public class Movement : MonoBehaviour
     [SerializeField] private GameObject groundCheckObj;
     private GroundChecker groundChecker;
     private bool jumpQueued;
+    private int jumpAmount = 0;
     private Rigidbody rb;
     private Transform cameraHolder;
     private Transform cameraPosition;
@@ -63,18 +64,30 @@ public class Movement : MonoBehaviour
         Cursor.visible = false;
     }
 
+    private bool wasGrounded;
+
     void Update()
     {
         grounded = groundChecker.isGrounded();
+
+        if (grounded && !wasGrounded)
+        {
+            jumpAmount = 0;
+        }
+        wasGrounded = grounded;
+
         handleMouseLook();
+
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            if (grounded)
+            if (jumpAmount < 2)
             {
                 jumpQueued = true;
+                jumpAmount++;
             }
         }
     }
+
 
     void FixedUpdate()
     {
