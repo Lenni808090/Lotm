@@ -93,6 +93,11 @@ public class Movement : MonoBehaviour
         rb.MovePosition(rb.position + move.normalized * speed * Time.fixedDeltaTime);
     }
 
+    public void handleJump()
+    {
+
+    }
+
     public void setRb(Rigidbody newRb)
     {
         rb = newRb;
